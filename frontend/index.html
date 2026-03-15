@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRO_PREDICT - Fertilizer Recommendation System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 AGRO_PREDICT</h1>
+            <p>Fertilizer Recommendation System</p>
+        </header>
+
+        <main>
+            <form id="fertilizerForm">
+                <div class="form-group">
+                    <label for="cropType">Crop Type:</label>
+                    <select id="cropType" required>
+                        <option value="">Select Crop Type</option>
+                        <option value="Wheat">Wheat</option>
+                        <option value="Rice">Rice</option>
+                        <option value="Maize">Maize</option>
+                        <option value="Cotton">Cotton</option>
+                        <option value="Sugarcane">Sugarcane</option>
+                        <option value="Soybean">Soybean</option>
+                        <option value="Barley">Barley</option>
+                        <option value="Oats">Oats</option>
+                        <option value="Potato">Potato</option>
+                        <option value="Tomato">Tomato</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="soilType">Soil Type:</label>
+                    <select id="soilType" required>
+                        <option value="">Select Soil Type</option>
+                        <option value="Sandy">Sandy</option>
+                        <option value="Loamy">Loamy</option>
+                        <option value="Clay">Clay</option>
+                        <option value="Silt">Silt</option>
+                        <option value="Peat">Peat</option>
+                        <option value="Chalk">Chalk</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nitrogen">Nitrogen (kg/ha):</label>
+                    <input type="number" id="nitrogen" step="0.1" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phosphorus">Phosphorus (kg/ha):</label>
+                    <input type="number" id="phosphorus" step="0.1" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="potassium">Potassium (kg/ha):</label>
+                    <input type="number" id="potassium" step="0.1" min="0" required>
+                </div>
+
+                <div class="location-section">
+                    <button type="button" id="detectLocation" class="location-btn">📍 Detect My Location</button>
+                    <div id="locationDisplay" class="location-display"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">Get Fertilizer Recommendation</button>
+            </form>
+
+            <div id="result" class="result hidden">
+                <h2>Recommendation</h2>
+                <div id="fertilizerResult"></div>
+                <div id="explanationResult"></div>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Analyzing your data...</p>
+            </div>
+
+            <div id="error" class="error hidden"></div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
