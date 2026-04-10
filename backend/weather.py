@@ -1,7 +1,7 @@
 import requests
 
 # OpenWeather API configuration
-API_KEY = ''
+API_KEY = '' # Put your API key here
 BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
 
 def get_weather(latitude, longitude):
