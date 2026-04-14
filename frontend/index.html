@@ -15,70 +15,103 @@
 
         <main>
             <form id="fertilizerForm">
+
+                <!-- 🔥 NEW: Mode Selection -->
+                <!-- <div class="form-group">
+                    <label class="mode-label">Input Mode:</label>
+
+                    <div class="mode-container">
+                        <label class="mode-option">
+                            <input type="radio" name="mode" value="manual" checked>
+                            <span>Manual Input</span>
+                        </label>
+
+                        <label class="mode-option">
+                            <input type="radio" name="mode" value="sensor">
+                            <span>Soil Sensor</span>
+                        </label>
+                    </div>
+                </div> -->
+
+                <!-- Crop -->
                 <div class="form-group">
                     <label for="cropType">Crop Type:</label>
-                    <select id="cropType" required>
+                    <select id="cropType" name="cropType" required>
                         <option value="">Select Crop Type</option>
-                        <option value="Wheat">Wheat</option>
-                        <option value="Rice">Rice</option>
                         <option value="Maize">Maize</option>
-                        <option value="Cotton">Cotton</option>
                         <option value="Sugarcane">Sugarcane</option>
-                        <option value="Soybean">Soybean</option>
+                        <option value="Cotton">Cotton</option>
+                        <option value="Tobacco">Tobacco</option>
+                        <option value="Paddy">Paddy</option>
                         <option value="Barley">Barley</option>
-                        <option value="Oats">Oats</option>
-                        <option value="Potato">Potato</option>
-                        <option value="Tomato">Tomato</option>
+                        <option value="Wheat">Wheat</option>
+                        <option value="Millets">Millets</option>
+                        <option value="Oil seeds">Oil seeds</option>
+                        <option value="Pulses">Pulses</option>
+                        <option value="Ground Nuts">Ground Nuts</option>
                     </select>
                 </div>
 
+                <!-- Soil -->
                 <div class="form-group">
                     <label for="soilType">Soil Type:</label>
-                    <select id="soilType" required>
+                    <select id="soilType" name="soilType" required>
                         <option value="">Select Soil Type</option>
                         <option value="Sandy">Sandy</option>
                         <option value="Loamy">Loamy</option>
-                        <option value="Clay">Clay</option>
-                        <option value="Silt">Silt</option>
-                        <option value="Peat">Peat</option>
-                        <option value="Chalk">Chalk</option>
+                        <option value="Black">Black</option>
+                        <option value="Red">Red</option>
+                        <option value="Clayey">Clayey</option>
                     </select>
                 </div>
 
+                <!-- NPK Inputs -->
                 <div class="form-group">
                     <label for="nitrogen">Nitrogen (kg/ha):</label>
-                    <input type="number" id="nitrogen" step="0.1" min="0" required>
+                    <input type="number" id="nitrogen" name="nitrogen" step="0.1" min="0" required>
                 </div>
 
                 <div class="form-group">
                     <label for="phosphorus">Phosphorus (kg/ha):</label>
-                    <input type="number" id="phosphorus" step="0.1" min="0" required>
+                    <input type="number" id="phosphorus" name="phosphorus" step="0.1" min="0" required>
                 </div>
 
                 <div class="form-group">
                     <label for="potassium">Potassium (kg/ha):</label>
-                    <input type="number" id="potassium" step="0.1" min="0" required>
+                    <input type="number" id="potassium" name="potassium" step="0.1" min="0" required>
                 </div>
 
+                <!-- 🔥 NEW: Sensor Button -->
+                <div class="form-group">
+                    <button type="button" onclick="useSensor()" class="location-btn">
+                        📡 Use Soil Sensor Values
+                    </button>
+                </div>
+
+                <!-- Location -->
                 <div class="location-section">
                     <button type="button" id="detectLocation" class="location-btn">📍 Detect My Location</button>
                     <div id="locationDisplay" class="location-display"></div>
                 </div>
 
+                <!-- Submit -->
                 <button type="submit" class="submit-btn">Get Fertilizer Recommendation</button>
             </form>
 
+            <!-- Result -->
             <div id="result" class="result hidden">
                 <h2>Recommendation</h2>
                 <div id="fertilizerResult"></div>
                 <div id="explanationResult"></div>
             </div>
 
+            <!-- Loading -->
             <div id="loading" class="loading hidden">
                 <div class="spinner"></div>
                 <p>Analyzing your data...</p>
             </div>
 
+            <!-- Error -->
             <div id="error" class="error hidden"></div>
         </main>
     </div>

@@ -194,3 +194,44 @@ input:focus, select:focus {
         font-size: 2rem;
     }
 }
+
+/* 🔥 MODE TOGGLE STYLING */
+
+.mode-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.mode-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.mode-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.mode-option input {
+    accent-color: #6c63ff;
+    transform: scale(1.1);
+}
+
+.location-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.location-btn:hover {
+    background: #218838;
+}

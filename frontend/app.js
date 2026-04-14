@@ -12,21 +12,20 @@ const explanationResult = document.getElementById('explanationResult');
 const loadingDiv = document.getElementById('loading');
 const errorDiv = document.getElementById('error');
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
+// Init
+document.addEventListener('DOMContentLoaded', function () {
     setupEventListeners();
 });
 
-// Setup event listeners
 function setupEventListeners() {
     detectLocationBtn.addEventListener('click', detectLocation);
     form.addEventListener('submit', handleSubmit);
 }
 
-// Detect user location using Geolocation API
+// ---------------- LOCATION ----------------
 function detectLocation() {
     if (!navigator.geolocation) {
-        showError('Geolocation is not supported by this browser.');
+        showError('Geolocation is not supported.');
         return;
     }
 
@@ -34,7 +33,7 @@ function detectLocation() {
     detectLocationBtn.textContent = 'Detecting...';
 
     navigator.geolocation.getCurrentPosition(
-        function(position) {
+        (position) => {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
 
@@ -47,33 +46,14 @@ function detectLocation() {
             detectLocationBtn.disabled = false;
             detectLocationBtn.textContent = '📍 Detect My Location';
         },
-        function(error) {
-            let errorMessage = 'Unable to detect location.';
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMessage = 'Location access denied. Please enable location permissions.';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMessage = 'Location information is unavailable.';
-                    break;
-                case error.TIMEOUT:
-                    errorMessage = 'Location request timed out.';
-                    break;
-            }
-
-            showError(errorMessage);
+        (error) => {
+            showError('Location error.');
             detectLocationBtn.disabled = false;
-            detectLocationBtn.textContent = '📍 Detect My Location';
-        },
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 300000
         }
     );
 }
 
-// Handle form submission
+// ---------------- FORM SUBMIT ----------------
 async function handleSubmit(event) {
     event.preventDefault();
 
@@ -82,8 +62,8 @@ async function handleSubmit(event) {
         return;
     }
 
-    // Get form data
     const formData = new FormData(form);
+
     const data = {
         crop_type: formData.get('cropType'),
         soil_type: formData.get('soilType'),
@@ -94,71 +74,82 @@ async function handleSubmit(event) {
         longitude: longitude
     };
 
-    // Show loading
     showLoading();
 
     try {
-        // Make API request
         const response = await fetch('http://localhost:5000/predict', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const result = await response.json();
 
-        // Display result
+        if (!response.ok) throw new Error(result.error);
+
         displayResult(result);
 
     } catch (error) {
-        showError('Failed to get recommendation. Please check if the backend server is running.');
-        console.error('Error:', error);
+        showError(error.message);
     } finally {
         hideLoading();
     }
 }
 
-// Display loading state
+// ---------------- SENSOR FUNCTION ----------------
+async function useSensor() {
+    const btn = event.target;
+
+    btn.disabled = true;
+    btn.textContent = "Collecting sensor data...";
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    try {
+        const res = await fetch('http://localhost:5000/sensor-data');
+        const data = await res.json();
+
+        document.getElementById('nitrogen').value = data.N;
+        document.getElementById('phosphorus').value = data.P;
+        document.getElementById('potassium').value = data.K;
+
+    } catch (error) {
+        showError("Failed to fetch sensor data");
+    }
+
+    btn.disabled = false;
+    btn.textContent = "📡 Use Soil Sensor Values";
+}
+
+// ---------------- UI ----------------
 function showLoading() {
     loadingDiv.classList.remove('hidden');
     resultDiv.classList.add('hidden');
     errorDiv.classList.add('hidden');
 }
 
-// Hide loading state
 function hideLoading() {
     loadingDiv.classList.add('hidden');
 }
 
-// Display result
 function displayResult(result) {
     fertilizerResult.innerHTML = `
         <div class="fertilizer-card">
             <h3>Recommended Fertilizer: ${result.fertilizer}</h3>
-            <p>Current Weather: ${result.temperature}°C, ${result.humidity}% humidity</p>
+            <p>Weather: ${result.temperature}°C, ${result.humidity}%</p>
         </div>
     `;
 
     explanationResult.innerHTML = `
         <div class="explanation-card">
-            <h4>AI Explanation:</h4>
             <p>${result.explanation}</p>
         </div>
     `;
 
     resultDiv.classList.remove('hidden');
-    errorDiv.classList.add('hidden');
 }
 
-// Show error message
 function showError(message) {
     errorDiv.textContent = message;
     errorDiv.classList.remove('hidden');
-    resultDiv.classList.add('hidden');
 }
